@@ -1,0 +1,98 @@
+---
+title: "Deployment"
+description: "Learn how to deploy your application"
+---
+
+import Neon from "/snippets/services/neon.mdx";
+import Upstash from "/snippets/services/upstash.mdx";
+
+One of the core ProductStack principles is continuous development and deployment.
+You should be deploying changes frequently, to production, so let's get your first
+one out of the way.
+
+## Prerequisites
+
+Before you begin, make sure you have the following prerequisites:
+
+<AccordionGroup>
+  <Accordion title="GitHub repository">
+    GitHub is used for hosting the repository. If you haven't already, [create a
+    new repository](https://github.com/new) and push up the code.
+  </Accordion>
+  <Accordion title="Vercel account">
+    Vercel is used for preview and production deployments. If you don't already
+    have an account, head to [vercel.com](https://vercel.com) and create one.
+  </Accordion>
+  <Accordion title="Third-party services">
+    You should have set up all of the [services](/getting-started/services) that you intend to use.
+  </Accordion>
+
+</AccordionGroup> 
+
+## Deploying
+
+These steps are for deploying the product application, you can use the same process for deploying the API application.
+
+<Steps>
+  <Step title="Create Vercel Project">
+    Go to your [Vercel dashboard](https://vercel.com) and click **Add New >
+    Project**. Click **Import** next to your repository.
+  </Step>
+  <Step title="Configure Project">
+    Give your project name, make sure `Next.js` is selected as the framework
+    and change the root directory to `apps/app`.
+  </Step>
+  <Step title="Environment Variables">
+    Set the following environment variables. If you haven't set up the services
+    yet, follow the [services](/getting-started/services) documentation to get
+    the values you need.
+
+    ```bash
+# Databases
+DATABASE_URL=""
+UPSTASH_REDIS_REST_URL=""
+UPSTASH_REDIS_REST_TOKEN=""
+
+# Email
+RESEND_API_KEY=""
+
+# Realtime
+ABLY_API_KEY=""
+
+# File Storage
+BLOB_READ_WRITE_TOKEN=""
+
+# Notifications
+SLACK_CLIENT_ID=""
+SLACK_CLIENT_SECRET=""
+SLACK_SIGNING_SECRET=""
+DISCORD_CLIENT_ID=""
+DISCORD_CLIENT_SECRET=""
+DISCORD_BOT_TOKEN=""
+
+# Auth Providers
+GOOGLE_CLIENT_SECRET=""
+GOOGLE_CLIENT_ID=""
+GITHUB_CLIENT_ID=""
+GITHUB_CLIENT_SECRET=""
+
+# Analytics
+OPENPANEL_CLIENT_ID=""
+NEXT_PUBLIC_OPENPANEL_CLIENT_ID=${OPENPANEL_CLIENT_ID}
+
+# Payments
+STRIPE_PUBLIC_KEY=""
+STRIPE_SECRET_KEY=""
+STRIPE_WEBHOOK_SECRET=""
+
+# Background Jobs
+QSTASH_TOKEN=""
+QSTASH_CURRENT_SIGNING_KEY=""
+QSTASH_NEXT_SIGNING_KEY=""
+```
+
+  </Step>
+  <Step title="Deploy">
+    Click **Deploy** and wait for the deployment to complete.
+  </Step>
+</Steps>

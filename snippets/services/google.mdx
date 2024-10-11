@@ -1,0 +1,16 @@
+Add Google as an authentication provider. This allows customers to "Sign in w/ Google".
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/) and sign up for an account.
+2. Create a new project.
+3. Under **APIs & Services** > **OAuth consent screen**, set the **User type** to `External` and click `Create`.
+4. Enter a name, support email address and developer email address and click `Save & Continue`.
+5. In the **Scopes** tab, add `userinfo.email`, `userinfo.profile`, `openid`. Click `Save & Continue`.
+6. In the **Test Users** tab, add your email address. Click `Save & Continue`.
+7. Under **APIs & Services** > **Credentials**, click `Create Credentials` > `OAuth client ID`.
+8. Give the credential set a name and add the following redirect url: `http://localhost:3000/login/oauth/google/callback`
+9. Copy the `Client ID` and `Client Secret` and set the following environment variables:
+
+```bash
+GOOGLE_CLIENT_ID=<client-id>
+GOOGLE_CLIENT_SECRET=<client-secret>
+```

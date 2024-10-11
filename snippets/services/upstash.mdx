@@ -1,0 +1,26 @@
+Upstash is a managed, serverless Redis for caching and ratelimiting as well as a
+serverless messaging system (QStash) for running background and queue jobs
+
+**Redis (KV)**
+
+1. Go to [Upstash](https://upstash.com/) and sign up for an account.
+2. Click **Redis** from the top menu and create a new database.
+3. On the **Details** page, scroll down to the **REST API** section and click the `.env` tab.
+4. Copy the `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` and set the following environment variables:
+
+```bash
+UPSTASH_REDIS_REST_URL=<rest-api-url>
+UPSTASH_REDIS_REST_TOKEN=<rest-api-token>
+```
+
+**QStash (Background jobs)**
+
+1. Click **QStash** from the top menu.
+2. On the **Overview** page, scroll down to the **Environment Keys** section and click the `.env` tab.
+3. Copy `QSTASH_TOKEN`, `QSTASH_CURRENT_SIGNING_KEY`, `QSTASH_NEXT_SIGNING_KEY` and set the following environment variables:
+
+```bash
+QSTASH_TOKEN=<qstash-token>
+QSTASH_CURRENT_SIGNING_KEY=<qstash-current-signing-key>
+QSTASH_NEXT_SIGNING_KEY=<qstash-next-signing-key>
+```

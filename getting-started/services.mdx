@@ -1,0 +1,71 @@
+---
+title: "Services"
+description: "Understand the developer and product services your codebase integrates with"
+---
+
+import GitHub from "/snippets/services/github.mdx";
+import Google from "/snippets/services/google.mdx";
+import OpenPanel from "/snippets/services/openpanel.mdx";
+import PostHog from "/snippets/services/posthog.mdx";
+import Discord from "/snippets/services/discord.mdx";
+import Slack from "/snippets/services/slack.mdx";
+import Neon from "/snippets/services/neon.mdx";
+import Upstash from "/snippets/services/upstash.mdx";
+import Stripe from "/snippets/services/stripe.mdx";
+import Vercel from "/snippets/services/vercel.mdx";
+import Resend from "/snippets/services/resend.mdx";
+import Ably from "/snippets/services/ably.mdx";
+
+## Overview
+
+Your codebase integrates with several third-party services, some requried and some optional, to
+provide important product functionality. It's **highly recommended** that you set up all the services
+before proceeding with the rest of this documentation.
+
+<Warning>
+  Every service has a free tier, you will only have to pay once you exceed the
+  free tier limits, ideally once you start generating revenue.
+</Warning>
+
+## Services
+
+Below is a list of all integrated services, their purpose, and how to set them up.
+You may see these instructions in other parts of the documentation but you can always
+refer back here for a complete list.
+
+<AccordionGroup>
+  <Accordion title="Vercel (deployment, uploads)">
+    <Vercel />
+  </Accordion>
+  <Accordion title="Neon (database)">
+    <Neon />
+  </Accordion>
+  <Accordion title="Upstash (kv, rate-limiting, queue)">
+    <Upstash />
+  </Accordion>
+  <Accordion title="Resend (email)">
+    <Resend />
+  </Accordion>
+  <Accordion title="Ably (realtime)">
+    <Ably />
+  </Accordion>
+    <Accordion title="Stripe (payments)">
+    <Stripe />
+  </Accordion>
+    <Accordion title="OpenPanel (analytics)">
+    <OpenPanel />
+  </Accordion>
+  <Accordion title="Google (authentication)">
+    <Google />
+  </Accordion>
+  <Accordion title="GitHub (authentication)">
+    <GitHub />
+  </Accordion>
+  <Accordion title="Discord (notifications)">
+    <Discord />
+  </Accordion>
+  <Accordion title="Slack (notifications)">
+    <Slack />
+  </Accordion>
+</AccordionGroup>
+

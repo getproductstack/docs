@@ -1,0 +1,91 @@
+---
+title: "Installation"
+description: "Follow this guide to get everything up and running on your local machine"
+---
+
+<Warning>
+  This documentation assumes you have access to the ProductStack repository on
+  GitHub. If you still need to purchase a license, please visit
+  getproductstack.com
+</Warning>
+
+## Prerequisites
+
+You'll need the following installed locally on your machine:
+
+- [Node.js](https://nodejs.org/en/download/) (>= v20.12.0)
+- [Bun](https://bun.sh/docs/installation)
+- [Docker](https://www.docker.com)
+- [OrbStack](https://www.orbstack.dev/) (recommended)
+
+You will also need API keys for the following services:
+
+- [Resend](/getting-started/services#resend-email)
+- [Ably](/getting-started/services#ably-realtime)
+
+## Installation Steps
+
+Once you have the met the prerequisites, you can start the development setup.
+
+<Steps>
+  <Step title="Clone the repository">
+
+```bash
+git clone https://github.com/getproductstack/productstack.git
+cd productstack
+```
+
+  </Step>
+  <Step title="Install dependencies">
+
+```bash
+bun install
+```
+
+  </Step>
+  <Step title="Set environment variables">
+
+```bash
+cp .env.example .env
+```
+
+Make sure to have the following environment variables set:
+
+- `APP_URL`
+- `DATABASE_URL`
+- `UPSTASH_REDIS_REST_URL`
+- `UPSTASH_REDIS_REST_TOKEN`
+- `RESEND_API_KEY`
+- `ABLY_API_KEY`
+
+</Step>
+
+<Step title="Start the database">
+
+```bash
+docker compose up -d
+bun db:push
+```
+
+</Step>
+
+<Step title="Start the development server">
+
+```bash
+bun dev
+```
+
+</Step>
+
+<Step title="Open your browser and navigate to">
+
+|        |                       |
+| ------ | --------------------- |
+| App    | http://localhost:3000 |
+| API    | http://localhost:5432 |
+| UI     | http://localhost:6100 |
+| Emails | http://localhost:3001 |
+
+</Step>
+
+</Steps>

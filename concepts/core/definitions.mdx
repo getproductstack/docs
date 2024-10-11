@@ -1,0 +1,209 @@
+---
+title: "Definitions"
+description: "The source of truth for all resource definitions"
+---
+
+## Overview
+
+The `definitions.ts` file is the source of truth for all of the resource definitions. This includes the following:
+
+- [Database schemas](/concepts/core/definitions#schema)
+- [Validation schemas](/concepts/core/definitions#validations)
+- [Constants](/concepts/core/definitions#constants)
+- [Type definitions](/concepts/core/definitions#types)
+
+## Database schema
+
+Most resources have a corresponding database table, as well as a [Drizzle schema](https://orm.drizzle.team/docs/sql-schema-declaration)
+that defines the table structure and associated relationships.
+
+Later we will see how these table definitions are used to derive [validations](/concepts/core/definitions#validations) 
+and [types](/concepts/core/definitions#types).
+
+<CodeGroup>
+```ts workspaces/definitions.ts
+/**
+ * Table schema for the workspaces resource.
+ */
+export const workspaces = table("workspaces", {
+  id: id("workspace"),
+  name: varchar("name", { length: 128 }).notNull(),
+  avatar: varchar("avatar", { length: 255 }),
+  billingEmail: varchar("billing_email", { length: 128 }).notNull(),
+  customerId: varchar("customer_id", { length: 64 }),
+  subscriptionId: varchar("subscription_id", { length: 64 }),
+  createdAt,
+});
+
+/**
+ * Relations for the workspaces resource.
+ */
+export const workspaceRelations = relations(workspaces, ({ many, one }) => ({
+  members: many(memberships),
+  subscription: one(subscriptions, {
+    fields: [workspaces.subscriptionId],
+    references: [subscriptions.id],
+  }),
+}));
+```
+
+```ts memberships/definitions.ts
+/**
+ * Table schema for the memberships resource.
+ */
+export const memberships = table(
+  "memberships",
+  {
+    id: id("member"),
+    userId: foreignId("user_id")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    workspaceId: foreignId("workspace_id")
+      .references(() => workspaces.id, { onDelete: "cascade" })
+      .notNull(),
+    role: varchar("role", { length: 12, enum: roles })
+      .$type<MembershipRole>()
+      .notNull(),
+    createdAt,
+    updatedAt,
+    leftAt: ts("left_at"),
+    suspendedAt: ts("suspended_at"),
+  },
+  (t) => ({
+    workspaceUserIdx: unique().on(t.workspaceId, t.userId),
+  }),
+);
+
+/**
+ * Relations for the memberships resource.
+ */
+export const membershipRelations = relations(memberships, ({ one }) => ({
+  workspace: one(workspaces, {
+    fields: [memberships.workspaceId],
+    references: [workspaces.id],
+  }),
+  user: one(users, {
+    fields: [memberships.userId],
+    references: [users.id],
+  }),
+}));
+```
+</CodeGroup>
+
+
+## Constants
+
+Some resources will have constant attributes, properties, or other hard-coded values that are used in definitions, models and frontend components.
+
+For example, the `memberships` database schema references a `roles` constant as an [enum](https://orm.drizzle.team/docs/column-types/pg#varchar),
+and frontend components make use of `membershipRoles` to populate dropdowns, tables, etc.
+
+<CodeGroup>
+
+```ts memberships/definitions.ts
+/**
+ * Roles enum used in the table schema.
+ */
+export const roles = ["owner", "admin", "read_write", "read_only"] as const;
+
+/**
+ * Membership roles used in dropdowns, lists, etc.
+ */
+export const membershipRoles = [
+  {
+    id: "owner",
+    name: "Owner",
+    description: "Manage everything.",
+  },
+  // ...
+] as const;
+```
+
+```ts api/tokens/definitions.ts
+/**
+ * API token permissions type.
+ */
+export const permissionTypes = ["read_only", "read_write"] as const;
+```
+
+</CodeGroup>
+
+Obviously, you are free to define as many constants as you need in a given resource.
+
+## Validation schemas
+
+[Zod](https://zod.dev/) validation schemas are used in [actions](/digging-deeper/actions) to validate user input. 
+The [drizzle-zod](https://orm.drizzle.team/docs/zod) package is used to generate `insert` validation schemas, which are then used as 
+the base for `update` validations.
+
+<CodeGroup>
+```ts memberships/definitions.ts
+/**
+ * Insert schema for the memberships resource.
+ */
+export const insertMembershipSchema = createInsertSchema(memberships);
+
+/**
+ * Update schema for the memberships resource.
+ */
+export const updateMembershipSchema = z.object({
+  id: z.string(),
+  changes: insertMembershipSchema.partial(),
+});
+```
+
+```ts api/tokens/definitions.ts
+/**
+ * Insert API token schema.
+ */
+export const insertTokenSchema = createInsertSchema(tokens, {
+  permissionsType: permissionsTypeSchema,
+}).omit({
+  userId: true,
+  workspaceId: true,
+});
+
+/**
+ * Update API token schema.
+ */
+export const updateTokenSchema = z.object({
+  id: z.string(),
+  changes: insertTokenSchema.partial(),
+});
+```
+
+</CodeGroup>
+
+Of course, you can create as many validation schemas you need for your resource.
+
+
+## Type definitions
+
+Resource type definitions are derived from existing definitions. The following are the most important:
+
+- `ResourceModel` - The business representation of `Resource`.
+- `DatabaseResource` - The database representation of `Resource`, including relationships.
+- `InsertDatabaseResource` - The type for inserting new database records.
+- `UpdateDatabaseResource` - The type for updating existing database records.
+
+<CodeGroup>
+
+```ts memberships/definitions.ts
+export type MembershipModel = ReturnType<typeof createMembershipModel>;
+export type DatabaseMembership = typeof memberships.$inferSelect & {
+  user?: DatabaseUser;
+  workspace?: DatabaseWorkspace;
+  role: MembershipRole;
+};
+export type InsertDatabaseMembership = z.infer<typeof insertMembershipSchema>;
+export type UpdateDatabaseMembership = z.infer<typeof updateMembershipSchema>;
+```
+
+```ts workspaces/definitions.ts
+export type WorkspaceModel = ReturnType<typeof createWorkspaceModel>;
+export type DatabaseWorkspace = typeof workspaces.$inferSelect;
+export type InsertDatabaseWorkspace = z.infer<typeof insertWorkspaceSchema>;
+export type UpdateDatabaseWorkspace = z.infer<typeof updateWorkspaceSchema>;
+```
+
+</CodeGroup>

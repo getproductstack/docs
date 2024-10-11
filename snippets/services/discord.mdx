@@ -1,0 +1,20 @@
+Discord is one of the available notification channels
+
+1. Create a [Discord Developer Portal](https://discord.com/developers/applications) account.
+2. Create a new application.
+3. On the **Installation** tab, check `Guild Install` and uncheck `User Install`.
+4. On the **Installation** tab, under **Default Install Settings > scopes**, select `bot`, `applications.commands`.
+5. On the **Installation** tab, under **Default Install Settings > permissions**, select `Attach Files`, `Embed Links`, `Send Messages`, `View Channels`.
+6. On the **OAuth2** tab, under **Redirects**, add `http://localhost:3000/integrations/discord/callback`.
+7. On the **OAuth2** tab, copy the **CLIENT ID** and **CLIENT SECRET** (you may need to reset it) and set the following environment variables:
+
+```bash
+DISCORD_CLIENT_ID=<client-id>
+DISCORD_CLIENT_SECRET=<client-secret>
+```
+
+8. On the "Bot" tab, under **Token**, copy the token (you may need to reset it) and set the following environment variables:
+
+```bash
+DISCORD_BOT_TOKEN=<token>
+```

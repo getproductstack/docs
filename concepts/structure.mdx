@@ -1,0 +1,87 @@
+---
+title: "Project Structure"
+description: "Understand the structure of your codebase"
+---
+
+## Overview
+
+ProductStack is a monorepo managed by [Turborepo](https://turbo.build/repo/docs). It combines shared packages, configuration, and 
+user-facing applications in a single repository. This structure is very
+common among newer product companies as it promotes reusability, modularity, and scalability.
+
+<Info>
+  If you are new to monorepos, don't worry! The structure is designed to be intuitive and
+  easy to understand. If you are interested in learning, here are some popular, open-source 
+  monorepos with a similar structure:
+
+  - [Cal.com](https://github.com/calcom/cal.com)
+  - [Midday](https://github.com/midday-ai/midday)
+  - [Dub](https://github.com/dubinc/dub)
+  - [OpenPanel](https://github.com/Openpanel-dev/openpanel)
+  - [Documenso](https://github.com/documenso/documenso)
+</Info>
+
+## Directory Structure
+
+There are four main top-level directories
+
+- [apps](#apps)
+- [packages](#packages)
+- [config](#config)
+- [turbo](#turbo)
+
+### Apps
+
+Applications are the user-facing (user, developer, admin, etc.) entrypoints of the repository.
+
+|               |                                            |
+| --------------| -------------------------------------------|
+| `apps/app`    | Your main product, a modern [Next.js](https://nextjs.org) application.
+| `apps/cli`    | CLI tool for managing development resources, built with [Commander](https://github.com/tj/commander.js).
+| `apps/api`    | Customer-facing REST API for accessing product data, built with [Hono](https://hono.dev).
+
+### Packages
+
+The packages directory contains shared libraries that provide functionality for the applications.
+
+|                    |                                                        |
+| ------------------------- | ------------------------------------------------------------------|
+| `packages/analytics`      | Product analytics providers
+| `packages/auth`           | Authentication providers
+| `packages/core`           | Core definitions, models, events, jobs and actions
+| `packages/db`             | Database schema and access layer
+| `packages/logger`         | Logging utilities
+| `packages/notifications`  | Multi-channel notifications
+| `packages/queue`          | Background jobs and message queue
+| `packages/realtime`       | WebSockets for real-time communication
+| `packages/storage`        | File uploads and storage
+| `packages/ui`             | React component library
+| `packages/utils`          | Utility functions and helpers
+
+### Config
+
+The config directory contains shared configuration files
+
+|                           |                                                                   |
+| ------------------------- | ------------------------------------------------------------------|
+| `config/github`           | Shared GitHub actions and workflows.
+| `config/postgres`         | Docker scripts for PostgreSQL.
+| `config/prompts`          | Shared AI prompt configuration.
+| `config/tailwind`         | Shared Tailwind CSS and design system configuration.
+| `config/typescript`       | Shared TypeScript configuration.
+
+
+### Turbo
+
+The turbo directory contains `generators` for creating new applications, packages, components, and core resources.
+
+## Next Steps
+
+Now that you have an overview of the structure, you can start digging into the core concepts.
+It is highly recommended you follow the rest of the core concepts in order.
+
+- [Database](/core-concepts/database)
+- [Core](/core-concepts/core)
+- [Auth](/core-concepts/auth)
+
+

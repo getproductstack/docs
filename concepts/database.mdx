@@ -1,0 +1,43 @@
+---
+title: "Database"
+description: "The layer that sits between core functionality and the database"
+---
+
+## Overview
+
+The database package is the layer that sits between the [core package](/core-concepts/core) and the database.
+The technologies involved are:
+
+- [PostgresSQL](https://www.postgresql.org/) - The relational, SQL database
+- [Drizzle ORM](https://orm.drizzle.team/docs/overview) - The object-relational mapping (ORM) library
+- [Neon](https://neon.tech/) - Managed database service
+
+If you are using a local database in development, you also have:
+
+- [Docker](https://www.docker.com/) - Database container
+- [OrbStack](https://www.orbstack.dev/) - Docker desktop alternative
+
+
+## Structure
+
+The database package is organized into the following directories:
+
+- `client` - The database clients (local and production)
+- `schema` - The Drizzle schema definitions
+- `scripts` - Database scripts
+- `utils` - Schema and query helper functions
+- `migrations` - Database migrations (managed by Drizzle)
+
+<Info>
+  You will mostly interact with the `schema` directory, most features start by creating or updating schema files.
+</Info>
+
+## Schema
+
+The schema directory contains your [Drizzle schema](https://orm.drizzle.team/docs/sql-schema-declaration) definitions, 
+which define your database tables and the relationships between them.
+
+You will notice that the schema directory structure is very similar to structyure of the core package. 
+This is because the schema is the API of the database,
+
+

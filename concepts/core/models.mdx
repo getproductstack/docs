@@ -1,0 +1,189 @@
+---
+title: "Models"
+description: "The business representation of a resource."
+---
+
+## Overview
+
+A model is the business representation of a resource. It includes database attributes, 
+computed attributes, helper methods, relationships to other resources, and anything else 
+the business needs to properly represent the concept.
+
+<Info>
+In some cases, models serve the same purpose as [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object), [View Models](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) 
+and [Presenters](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter).
+</Info>
+
+## Creating models
+
+Models are created using factory functions that transform the raw database object into the model representation. These 
+functions are very simple and have the following signature:
+
+```ts
+type ModelFactory<TInput, TOutput> = (data: TInput) => TOutput;
+```
+
+### Examples
+
+`createUserModel` is a simple example -- it has no relationships, and few additional attributes.
+
+<CodeGroup>
+
+```ts users/models.ts
+import { initials } from "@repo/utils/string";
+import { expandDate } from "@repo/utils/date";
+
+import type { DatabaseUser } from "./definitions";
+
+/**
+ * Creates a user model.
+ * 
+ * @param user - The database user.
+ * @returns The user model.
+ */
+export function createUserModel(user: DatabaseUser) {
+  return {
+    /**
+     * The database user object.
+     */
+    ...user,
+    /**
+     * The username for display purposes.
+     */
+    username: user.name ?? user.email,
+    /**
+     * The user's initials, used the avatar components.
+     */
+    initials: initials(user.name ?? user.email),
+    /**
+     * Expanded date object.
+     */
+    createdAt: expandDate(user.createdAt),
+  };
+}
+```
+
+```ts users/definitions.ts
+/**
+ * The user model.
+ */
+export type UserModel = ReturnType<typeof createUserModel>;
+```
+
+</CodeGroup>
+
+`createCommentModel` is a more complex example -- it has computed attributes, recursive relationships, and relationships that transform to other models.
+
+<CodeGroup>
+
+```ts comments/models.ts
+import { expandDate } from "@repo/utils/date";
+
+import { createUserActor } from "#core/accounts/users/models";
+import { createAttachmentModel } from "../attachments/models";
+import type { CommentModel, DatabaseComment } from "./definitions";
+
+/**
+ * Creates a comment model.
+ * 
+ * @param comment - The database comment.
+ * @returns The comment model.
+ */
+export function createCommentModel(comment: DatabaseComment) {
+  return {
+    /**
+     * The database comment object.
+     */
+    ...comment,
+    /**
+     * Expanded date object.
+     */
+    createdAt: expandDate(comment.createdAt),
+    /**
+     * The actor.
+     */
+    actor: comment.actor ? createUserActor(comment.actor) : null,
+    /**
+     * The attachments.
+     */
+    attachments: comment.attachments?.map(createAttachmentModel) ?? [],
+    /**
+     * The children.
+     */
+    children: comment.children?.map((child) => createCommentModel(child)) ?? [],
+  };
+}
+```
+
+</CodeGroup>
+
+### When to use
+
+A good rule of thumb is that whenever you are working with a resource, you should be using its model.
+The exceptions are when you are creating or updating the resource, in which case you should be using 
+[validation schemas](/concepts/core/definitions#validation-schemas) and [database types](/concepts/core/definitions#type-definitions).
+
+### How to use
+
+One of the most common places you will use models is in [queries](/concepts/core/queries). 
+Nearly every query function ends up chaining a call to `createModel` or `createModels`.
+
+<CodeGroup>
+
+```ts workspaces/queries.ts
+const { createModel } = createModelFactories(createWorkspaceModel);
+
+/**
+ * Get a workspace by its ID.
+ */
+export async function workspaceById(id: string) {
+  return db.query.workspaces
+    .findFirst({ where: eq(workspaces.id, id) })
+    .then(createModel);
+}
+```
+
+```ts memberships/queries.ts
+const { createModels } = createModelFactories(createMembershipModel);
+
+/**
+ * Get a user's memberships by their ID.
+ */
+export async function membershipsByUserId(userId: string) {
+  return db.query.memberships
+    .findMany({
+      with: { workspace: true },
+      where: eq(memberships.userId, userId),
+    })
+    .then(createModels);
+}
+```
+
+```ts base/models.ts
+/**
+ * Helper function for creating model factories.
+ */
+export function createModelFactories<TInput, TOutput>(
+  factory: ModelFactory<TInput, TOutput>,
+) {
+  return {
+    /**
+     * Create a single model.
+     */
+    createModel: (data?: TInput) => (data ? factory(data) : null),
+
+    /**
+     * Create multiple models.
+     */
+    createModels: (data: TInput[]) => data.map((item) => factory(item)),
+  };
+}
+```
+</CodeGroup>
+
+<Note>
+  You may be thinking that this is a lot of work for something that should be simple, and it kind of is.
+  The benefit of this approach is that it provides consistency and it scales really well.
+</Note>
+
+

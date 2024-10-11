@@ -1,0 +1,13 @@
+Vercel is used for deployments and file uploads. You can also use Vercel
+for the database (through the Neon integration) and Redis (through the Upstash integration)
+
+**File uploads**
+
+1. Go to your [Vercel](https://vercel.com/) account.
+2. Go to the **Storage** tab and `Create` a new **Blob** storage.
+3. Under **Quickstart**, click the **.env.local** tab, copy the `BLOB_READ_WRITE_TOKEN` and set the following environment variables:
+
+```bash
+BLOB_READ_WRITE_TOKEN=<your-token>
+```
+

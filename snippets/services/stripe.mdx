@@ -1,0 +1,12 @@
+Stripe is used for payments and subscription billing.
+
+1. Go to [Stripe](https://stripe.com/) and sign up for an account.
+2. Toggle `Test mode` on and visit [API keys](https://dashboard.stripe.com/test/apikeys) to create a new API key.
+3. Copy the **Publishable key** and the **Secret key** and set the following environment variables:
+
+```bash
+STRIPE_PUBLIC_KEY=<public-key>
+STRIPE_SECRET_KEY=<secret-key>
+```
+
+Learn more about billing and using Stripe with ProductStack [here](/build/billing).
