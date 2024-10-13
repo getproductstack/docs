@@ -1,0 +1,152 @@
+---
+title: "Mutations"
+icon: "bolt"
+---
+
+Mutations are functions that modify data, most commonly used to create, update, and delete resources.
+
+Here are a few examples:
+
+<CodeGroup>
+
+```ts invitations/mutations.ts
+/**
+ * Create an invitation.
+ */
+export async function createInvitation({
+  ctx,
+  input,
+}: Action<InsertDatabaseInvitation>) {
+  ctx.gate.authorize("create.memberships");
+
+  const [invite] = await db
+    .insert(invitations)
+    .values({
+      email: input.email,
+      invitedById: ctx.tenant.userId,
+      workspaceId: ctx.tenant.workspaceId,
+    })
+    .returning();
+
+  if (!invite) {
+    throw new Error("Failed to create invitation");
+  }
+
+  ctx.events.emit("invitation.created", created);
+
+  return created;
+}
+
+```
+
+```ts activity/mutations.ts
+/**
+ * Update a activity.
+ */
+export async function updateActivity({
+  ctx,
+  input,
+}: Action<UpdateDatabaseActivity>) {
+  ctx.gate.authorize("update.activities");
+
+  const [updated] = await db
+    .update(activities)
+    .set(input.changes)
+    .where(
+      and(
+        eq(activities.id, input.id),
+        eq(activities.workspaceId, ctx.tenant.workspaceId),
+      ),
+    )
+    .returning();
+
+  if (!updated) {
+    throw new Error("Failed to update activity");
+  }
+
+  ctx.events.emit("activity.updated", input);
+
+  return updated;
+}
+
+```
+
+</CodeGroup>
+
+## Anatomy
+
+If you look at the examples above, you'll notice they have a similar structure, they all:
+
+- accept [Context](/concepts/core/context) and input parameters
+- authorize the operation being performed
+- perform the necessary operation(s)
+- emit an event if the operation was successful
+- return a response
+
+Let's take a look at some of these in more detail.
+
+### Parameters
+
+Most mutations use the `Action` type in their signature, which provides `ctx` ([Context](/concepts/core/context)) 
+and `input` objects.
+ 
+```ts
+export type Action<TInput = unknown> = {
+  ctx: Context;
+  input: TInput;
+};
+```
+
+Of course, you are free to define mutations without these parameters, but it makes using them
+with [actions](/concepts/core/actions) a little more verbose.
+
+### Authorization
+
+Before any operation logic, mutations should [authorize](/concepts/core/auth#authorization) 
+the actor to ensure they have the necessary permissions.
+
+The primary way to perform these authorization checks is to use the tenant-aware `gate`
+on the `ctx` object.
+
+```ts
+/**
+ * Authorize the user to create a membership.
+ */
+ctx.gate.authorize("create.memberships");
+
+/**
+ * Authorize the user to update an activity.
+ */
+ctx.gate.authorize("update.activities");
+```
+
+You can learn more about gates, and authorization in general, in the [auth section](/concepts/core/auth#authorization).
+
+### Emitting events
+
+If the mutation modifies a resource in any way, it should send a notification to
+the rest of the system by emitting an event.
+
+You do this by calling `ctx.events.emit` with the event name and the payload of the resource that was modified.
+
+```ts
+/**
+ * Emit an event when an invitation is created.
+ */
+ctx.events.emit("invitation.created", created);
+
+/**
+ * Emit an event when an activity is updated.
+ */
+ctx.events.emit("activity.updated", input);
+```
+
+By emitting an event, other parts of the system that are interested in the modified resource can
+react to the change.
+
+You can learn more about events and subscribing to them in the [events section](/concepts/core/events).
+
+## Where to use
+
+It is most common for mutations to be used within [actions](/concepts/core/actions), where they can group together
+related operations, but you are free to use them wherever you see fit.

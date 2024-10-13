@@ -1,24 +1,22 @@
 ---
 title: "Definitions"
-description: "The source of truth for all resource definitions"
+icon: "brackets-curly"
 ---
 
-## Overview
-
-The `definitions.ts` file is the source of truth for all of the resource definitions. This includes the following:
+Resources are defined by the following:
 
 - [Database schemas](/concepts/core/definitions#schema)
 - [Validation schemas](/concepts/core/definitions#validations)
 - [Constants](/concepts/core/definitions#constants)
 - [Type definitions](/concepts/core/definitions#types)
 
-## Database schema
+## Database schemas
 
-Most resources have a corresponding database table, as well as a [Drizzle schema](https://orm.drizzle.team/docs/sql-schema-declaration)
-that defines the table structure and associated relationships.
+If the resource has a database table, it will have a [Drizzle schema](https://orm.drizzle.team/docs/sql-schema-declaration)
+that defines the table structure and the associated relationships.
 
-Later we will see how these table definitions are used to derive [validations](/concepts/core/definitions#validations) 
-and [types](/concepts/core/definitions#types).
+Later, we will see how these table definitions are used to derive [validations](/concepts/core/definitions#validations), 
+[types](/concepts/core/definitions#types), and more. But first, let's take a look at a few examples:
 
 <CodeGroup>
 ```ts workspaces/definitions.ts
@@ -90,51 +88,13 @@ export const membershipRelations = relations(memberships, ({ one }) => ({
 ```
 </CodeGroup>
 
-
-## Constants
-
-Some resources will have constant attributes, properties, or other hard-coded values that are used in definitions, models and frontend components.
-
-For example, the `memberships` database schema references a `roles` constant as an [enum](https://orm.drizzle.team/docs/column-types/pg#varchar),
-and frontend components make use of `membershipRoles` to populate dropdowns, tables, etc.
-
-<CodeGroup>
-
-```ts memberships/definitions.ts
-/**
- * Roles enum used in the table schema.
- */
-export const roles = ["owner", "admin", "read_write", "read_only"] as const;
-
-/**
- * Membership roles used in dropdowns, lists, etc.
- */
-export const membershipRoles = [
-  {
-    id: "owner",
-    name: "Owner",
-    description: "Manage everything.",
-  },
-  // ...
-] as const;
-```
-
-```ts api/tokens/definitions.ts
-/**
- * API token permissions type.
- */
-export const permissionTypes = ["read_only", "read_write"] as const;
-```
-
-</CodeGroup>
-
-Obviously, you are free to define as many constants as you need in a given resource.
-
 ## Validation schemas
 
 [Zod](https://zod.dev/) validation schemas are used in [actions](/digging-deeper/actions) to validate user input. 
 The [drizzle-zod](https://orm.drizzle.team/docs/zod) package is used to generate `insert` validation schemas, which are then used as 
-the base for `update` validations.
+the base for `update` validation schemas.
+
+Here are a few examples:
 
 <CodeGroup>
 ```ts memberships/definitions.ts
@@ -177,12 +137,53 @@ export const updateTokenSchema = z.object({
 Of course, you can create as many validation schemas you need for your resource.
 
 
+
+## Constants
+
+When other parts of the codebase need to reference attributes, properties, or other hard-coded values for the resource, they are exported as constants.
+
+For example, the `memberships` database schema references `roles` as an [enum](https://orm.drizzle.team/docs/column-types/pg#varchar),
+and the frontend makes use of `membershipRoles` to populate dropdowns, table cells, etc.
+
+<CodeGroup>
+
+```ts memberships/definitions.ts
+/**
+ * Roles enum used in the table schema.
+ */
+export const roles = ["owner", "admin", "read_write", "read_only"] as const;
+
+/**
+ * Membership roles used in dropdowns, lists, etc.
+ */
+export const membershipRoles = [
+  {
+    id: "owner",
+    name: "Owner",
+    description: "Manage everything.",
+  },
+  // ...
+] as const;
+```
+
+```ts api/tokens/definitions.ts
+/**
+ * API token permissions type.
+ */
+export const permissionTypes = ["read_only", "read_write"] as const;
+```
+
+</CodeGroup>
+
+Obviously, you are free to define as many constants as you need in a given resource.
+
 ## Type definitions
 
-Resource type definitions are derived from existing definitions. The following are the most important:
+Core resources have four primary representations: database, business, insert, and update. These 
+representations are derived from existing resource definitions. The following are the most important:
 
-- `ResourceModel` - The business representation of `Resource`.
 - `DatabaseResource` - The database representation of `Resource`, including relationships.
+- `ResourceModel` - The business representation of `Resource`.
 - `InsertDatabaseResource` - The type for inserting new database records.
 - `UpdateDatabaseResource` - The type for updating existing database records.
 

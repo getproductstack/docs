@@ -1,0 +1,93 @@
+---
+title: "Queries"
+icon: "bars-filter"
+---
+
+Queries are functions that fetch data from external sources -- mostly the database, but also third-party services, the file system, and more.
+
+Here are a few common examples:
+
+<CodeGroup>
+
+```ts memberships/queries.ts
+const { createModel, createModels } = createModelFactories(
+  createMembershipModel,
+);
+
+/**
+ * Get a membership by ID.
+ */
+export async function membershipById(membershipId: string) {
+  return db.query.memberships
+    .findFirst({
+      with: { 
+        user: true,
+        workspace: true
+      },
+      where: eq(memberships.id, membershipId),
+    })
+    .then(createModel);
+}
+
+/**
+ * Get the user's memberships.
+ */
+export async function membershipsByUserId(userId: string) {
+  return db.query.memberships
+    .findMany({
+      with: { 
+        workspace: true 
+      },
+      where: eq(memberships.userId, userId),
+    })
+    .then(createModels);
+}
+```
+
+```ts location/queries.ts
+/**
+ * Get an array of countries.
+ */
+export async function getCountries() {
+  return [
+    {
+      iso: "AD",
+      name: "Andorra",
+      unicode: "U+1F1E6 U+1F1E9",
+      flag: "🇦🇩",
+    },
+    {
+      iso: "AE",
+      name: "United Arab Emirates",
+      unicode: "U+1F1E6 U+1F1EA",
+      flag: "🇦🇪",
+    },
+    // ...
+  ];
+}
+```
+
+</CodeGroup>
+
+## Writing queries
+
+Most queries are database queries, so understanding Drizzle's [query builder](https://orm.drizzle.team/docs/rqb) 
+and [SQL syntax](https://orm.drizzle.team/docs/select) gets you most of the way there. There are, however, a few 
+general rules that you should follow when writing queries:
+
+- function names start with the resource name: `membership`ById
+- function names include query parameters: user`ById`, members`ByWorkspaceId`
+- accept only the parameters required for the query, no context objects
+- database queries should always return a single model or a collection of models
+- use consistent, shared pagination, filter and sorting logic
+- use custom transformations when needed, but avoid them when possible
+- do not export the query if it is not used outside the file
+
+## Where to use
+
+Simply put, queries are used wherever you need to access the data they return, most commonly from the following places:
+
+- other queries
+- mutations
+- server actions
+- tRPC procedures

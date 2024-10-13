@@ -1,23 +1,28 @@
 ---
 title: "Overview"
-description: "The foundational building blocks of your product"
+icon: "box"
 ---
 
-## Overview
-
-The core package is by far and away the most important part of your codebase, it's the foundation 
-that everything else is built upon. Specifically, it represents the important business concepts found 
-within your product.
+Perhaps the most important part of your codebase, `packages/core` is the foundation upon which 
+everything else is built. Specifically, it represents the business concepts -- the 
+framework-agnostic building blocks -- that make up your product.
 
 <Frame>
   <img src="/images/code/dir-core.png" alt="Core Directory Structure"  className="rounded-xl" />
 </Frame>
 
-## Naming Conventions
+<Note>
+  When discussing the core package, we use the term "resource" to refer to business or product concepts.
+  You may also see this term referred to as a "concept".
+</Note>
 
-The core package has strong naming conventions, each resource is structured the same way and each 
-file contains the same exports. This consistency makes it easier to understand and navigate the codebase, 
-as well as [generate code](/digging-deeper/codegen) programatically.
+## Naming conventions
+
+The core package has strong conventions, with each resource being structured the same way and each 
+file containing the same exports. This consistency makes it easy to understand and navigate, 
+while also making it easier to [generate resources](/digging-deeper/codegen) programatically.
+
+Here are a few snippets of this naming convention in practice:
 
 <CodeGroup>
 
@@ -42,7 +47,7 @@ export type InsertDatabaseMembership = z.infer<typeof insertMembershipSchema>;
 Obviously, not every file is required and you are free to add additional files and exports as needed, 
 but following this general structure is highly recommended.
 
-## Directory Structure
+## Directory structure
 
 Within each concept directory, you may see the following:
 
@@ -53,3 +58,7 @@ Within each concept directory, you may see the following:
 - [`mutations.ts`](/concepts/core/mutations) - data modification functions
 - [`jobs.ts`](/concepts/core/jobs) - background, queued and scheduled jobs
 - [`notifications.ts`](/concepts/core/notifications) - notification definitions
+
+
+
+

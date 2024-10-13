@@ -1,0 +1,160 @@
+---
+title: "Jobs"
+icon: "clock-rotate-left"
+---
+
+Jobs are a way to perform operations outside of the normal request-response lifecycle. This includes
+background jobs, scheduled jobs (cron jobs), job workflows, and job queues.
+
+Here is an example of dispatching a job that sends a workspace invitation email:
+
+```ts
+import { sendInvitationJob } from "#core/accounts/invitations/jobs";
+
+await sendInvitationJob.dispatch(
+  { email: "test@example.com" }
+);
+```
+
+There are many reasons to use jobs, but the most common are:
+
+- To avoid blocking the response and improve perceived performance
+- To control execution order and concurrency
+- To scale independently from the main request handlers
+
+Common job use cases include:
+
+- Sending emails
+- Processing payments
+- Generating reports
+- Refreshing caches
+- Triggering notifications
+- Running workflows
+
+## Infrastructure
+
+In serverless environments, jobs are infrastructure-specific, and ProductStack provides
+implementations using Upstash [QStash](https://upstash.com/docs/qstash) and
+[Workflows](https://upstash.com/docs/qstash/workflow/getstarted)
+
+The rest of this guide will assume you are using these implementations.
+
+## Creating jobs
+
+Jobs are created using the `createJob` factory function provided by `packages/queue`. Here is an example:
+
+```ts 
+import { channels, templates } from "@repo/notification";
+import { createJob } from "@repo/queue";
+import { appConfig } from "@repo/utils/config";
+import { url } from "@repo/utils/request";
+
+import type { InvitationModel } from "./definitions";
+
+/**
+ * Send an invitation email.
+ */
+export const sendInvitationJob = createJob(
+  { key: "send-invitation-email" },
+  async ({ email, workspace, invitedBy, token }: InvitationModel) => {
+    if (!workspace) {
+      throw new Error("Invitation does not have a workspace");
+    }
+
+    await channels.resend.send({
+      to: email,
+      subject: `Join ${workspace.name} on ${appConfig.name}`,
+      html: templates.workspaceInvitation({
+        link: url(`join/${token}`, { email }).toString(),
+        workspaceName: workspace.name,
+        invitedByName: invitedBy?.name ?? null,
+      }),
+    });
+  },
+);
+```
+
+Jobs are functions that take two arguments:
+
+1. A job definition object
+2. A function that takes a single argument, the job payload
+
+## Executing jobs
+
+Once created, jobs can be exported/imported, and "executed" in a number of ways:
+
+- Asynchronously using `dispatch`
+- Synchronously using `trigger`
+- On a schedule using `schedule`
+- In a queue using `queue`
+
+### Dispatch
+
+Sticking with our example, `sendInvitationJob` can be executed as a background job using the `dispatch`
+method.
+
+```ts
+import { sendInvitationJob } from "#core/accounts/invitations/jobs";
+
+await sendInvitationJob.dispatch(
+  { email: "test@example.com" }
+);
+```
+
+### Trigger
+
+Jobs can be executed synchronously, like any other function, which is useful for testing and development.
+
+```ts
+import { sendInvitationJob } from "#core/accounts/invitations/jobs";
+
+await sendInvitationJob.trigger(
+  { email: "test@example.com" }
+);
+```
+
+<Note>
+The `dispatch` method will automatically use `trigger` when the `NODE_ENV` environment variable is set to `development`.
+</Note>
+
+### Schedule
+
+In order to schedule a job, call `schedule` and provide a cron expression.
+
+```ts
+import { sendInvitationJob } from "#core/accounts/invitations/jobs";
+
+await sendInvitationJob.schedule(
+  { email: "test@example.com" },
+  { schedule: "* * * * *" },
+);
+```
+
+You can learn more about scheduling on the [Upstash documentation](https://upstash.com/docs/qstash/features/schedules).
+
+### Queue
+
+To queue a job, call the `queue` method and provide the queue name:
+
+```ts
+import { sendInvitationJob } from "#core/accounts/invitations/jobs";
+
+await sendInvitationJob.queue(
+  { email: "test@example.com" },
+  { queue: "invitations" },
+);
+```
+
+You can learn more about queuing on the [Upstash documentation](https://upstash.com/docs/qstash/features/queues).
+
+### Delays
+
+Jobs can be delayed by providing a delay option to the `dispatch` and `queue` methods.
+
+```ts
+// Delay for 10 seconds
+await sendInvitationJob.dispatch(
+  { email: "test@example.com" },
+  { delay: 10000 },
+);
+```

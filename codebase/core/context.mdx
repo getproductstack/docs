@@ -1,0 +1,64 @@
+---
+title: "Context"
+icon: "crosshairs"
+---
+
+Every request into your application has context, the state of the application during that request.
+The `Context` object is a centralized way to access this 
+application state from different parts of the system. 
+
+The context is made up of the following:
+
+- `Tenant`: current user, workspace, membership, role, and billing information
+- `Actor`: the entity performing actions (`user`, `integration`, or `system`)
+- `SessionModel`: the current user's session data
+- `Gate`: tenant scoped authorization and access control
+- `Events`: tenant scoped event dispatcher
+
+## Accessing Context
+
+When using [actions](/concepts/core/actions), the context is created automatically and made available to the action as a parameter.
+You can also create the context manually by calling one of the `contextFrom` functions.
+
+- `contextFromSession` - create the context from a `SessionModel`
+- `contextFromTenant` - create the context from the current `Tenant`
+- `contextFromMembership` - create the context from a `MembershipModel`
+- `tenantFromToken` -> `contextFromTenant` - create the context from an `TokenModel`
+
+<CodeGroup>
+
+```ts SessionModel
+/**
+ * Create the context from the given `SessionModel`
+ */
+const context = contextFromSession(session);
+```
+
+```ts MembershipModel
+/**
+ * Create the context from the given `MembershipModel`
+ */ 
+const context = contextFromMembership(membership);
+```
+
+```ts TokenModel
+/**
+ * Create the context from the given `TokenModel`
+ */
+const tenant = tenantFromToken(token);
+const context = contextFromTenant(tenant);
+```
+
+```ts Tenant
+/**
+ * Create the context from the current `Tenant`
+ */
+const context = contextFromTenant(tenant);
+```
+
+</CodeGroup>
+
+
+
+
+

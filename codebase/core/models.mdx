@@ -1,22 +1,21 @@
 ---
 title: "Models"
-description: "The business representation of a resource."
+icon: "database"
 ---
 
-## Overview
-
-A model is the business representation of a resource. It includes database attributes, 
-computed attributes, helper methods, relationships to other resources, and anything else 
+In the [definitions](/concepts/core/definitions) section, we discussed how core resources have four primary representations:
+database, business, insert, and update. Models are the business representations -- they include 
+database attributes, computed attributes, helper methods, relationships to other resources, and anything else 
 the business needs to properly represent the concept.
 
 <Info>
 In some cases, models serve the same purpose as [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object), [View Models](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) 
-and [Presenters](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter).
+and [Presenters](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter), but they are more than that.
 </Info>
 
 ## Creating models
 
-Models are created using factory functions that transform the raw database object into the model representation. These 
+Models are created using factory functions that transform the database representation into the business representation. These 
 functions are very simple and have the following signature:
 
 ```ts
@@ -25,7 +24,7 @@ type ModelFactory<TInput, TOutput> = (data: TInput) => TOutput;
 
 ### Examples
 
-`createUserModel` is a simple example -- it has no relationships, and few additional attributes.
+`createUserModel` is a simple example -- it has no relationships, and just a few additional attributes.
 
 <CodeGroup>
 
@@ -119,14 +118,14 @@ export function createCommentModel(comment: DatabaseComment) {
 
 ### When to use
 
-A good rule of thumb is that whenever you are working with a resource, you should be using its model.
-The exceptions are when you are creating or updating the resource, in which case you should be using 
-[validation schemas](/concepts/core/definitions#validation-schemas) and [database types](/concepts/core/definitions#type-definitions).
+Whenever you are working with a resource, you should almost always be using its model representation.
+The exceptions are when you are interfacing with the database, either when creating or updating a resource.
+In these cases, you should be using [validation schemas](/concepts/core/definitions#validation-schemas) and [database types](/concepts/core/definitions#type-definitions).
 
 ### How to use
 
-One of the most common places you will use models is in [queries](/concepts/core/queries). 
-Nearly every query function ends up chaining a call to `createModel` or `createModels`.
+The most common place you will use these model functions is in [queries](/concepts/core/queries). 
+Most query functions chain a call to either `createModel` or `createModels`.
 
 <CodeGroup>
 
@@ -158,6 +157,10 @@ export async function membershipsByUserId(userId: string) {
     .then(createModels);
 }
 ```
+</CodeGroup>
+
+You may have noticed the `createModelFactories` function being used, this is just a convenience function 
+that makes it easier chain calls like the above.
 
 ```ts base/models.ts
 /**
@@ -179,11 +182,4 @@ export function createModelFactories<TInput, TOutput>(
   };
 }
 ```
-</CodeGroup>
-
-<Note>
-  You may be thinking that this is a lot of work for something that should be simple, and it kind of is.
-  The benefit of this approach is that it provides consistency and it scales really well.
-</Note>
-
 

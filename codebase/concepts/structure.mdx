@@ -1,18 +1,18 @@
 ---
 title: "Project Structure"
-description: "Understand the structure of your codebase"
+icon: "sitemap"
 ---
 
-## Overview
+ProductStack comes as a [monorepo](https://monorepo.tools/), which is managed 
+by [Turborepo](https://turbo.build/repo/docs). It combines shared packages, configuration, and 
+user-facing applications in a single repository, hence the term monorepo. 
 
-ProductStack is a monorepo managed by [Turborepo](https://turbo.build/repo/docs). It combines shared packages, configuration, and 
-user-facing applications in a single repository. This structure is very
-common among newer product companies as it promotes reusability, modularity, and scalability.
+This structure is very common among startups, and big tech companies because it simplifies development, deployment, 
+and maintenance.
 
 <Info>
-  If you are new to monorepos, don't worry! The structure is designed to be intuitive and
-  easy to understand. If you are interested in learning, here are some popular, open-source 
-  monorepos with a similar structure:
+  If you are new to monorepos, don't worry! This documentation will guide you through the structure. 
+  If you are interested in learning, here are some popular, open-source monorepos with a similar structure:
 
   - [Cal.com](https://github.com/calcom/cal.com)
   - [Midday](https://github.com/midday-ai/midday)
@@ -75,13 +75,5 @@ The config directory contains shared configuration files
 
 The turbo directory contains `generators` for creating new applications, packages, components, and core resources.
 
-## Next Steps
-
-Now that you have an overview of the structure, you can start digging into the core concepts.
-It is highly recommended you follow the rest of the core concepts in order.
-
-- [Database](/core-concepts/database)
-- [Core](/core-concepts/core)
-- [Auth](/core-concepts/auth)
 
 

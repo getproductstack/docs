@@ -27,92 +27,91 @@
   },
   "tabs": [
     {
-      "name": "Design System",
-      "url": "design-system"
+      "name": "Documentation",
+      "url": "/"
     },
     {
-      "name": "Packages",
-      "url": "packages"
+      "name": "Product Guide", 
+      "url": "guide"
     },
     {
-      "name": "API Reference",
-      "url": "api-reference"
+      "name": "Components",
+      "url": "components"
+    },
+    {
+      "name": "API",
+      "url": "customer-api"
     }
   ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "/"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://founderbuilders.circle.so"
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/getproductstack"
     },
     {
       "name": "Website",
       "icon": "browser",
       "url": "https://getproductstack.com"
+    },
+    {
+      "name": "Community",
+      "icon": "discord",
+      "url": "https://discord.gg/productstack"
     }
   ],
   "navigation": [
     {
       "group": "Getting Started",
       "pages": [
-        "getting-started/introduction",
-        "getting-started/installation",
-        "getting-started/services",
-        "getting-started/deployment"
+        "codebase/start/introduction",
+        "codebase/start/installation",
+        "codebase/start/services",
+        "codebase/start/deployment"
       ]
     },
     {
       "group": "Concepts",
       "pages": [
-        "concepts/structure",
-        "concepts/database",
-        {
-          "group": "Core Package",
-          "pages": [
-            "concepts/core/overview",
-            "concepts/core/definitions",
-            "concepts/core/models",
-            "concepts/core/queries",
-            "concepts/core/mutations",
-            "concepts/core/jobs",
-            "concepts/core/events",
-            "concepts/core/notifications"
-          ]
-        },
-        "concepts/auth"
+        "codebase/concepts/structure",
+        "codebase/concepts/database",
+        "codebase/concepts/auth"
       ]
     },
     {
-      "group": "Digging Deeper",
+      "group": "Core Package",
       "pages": [
-        "digging-deeper/events",
-        "digging-deeper/background-jobs",
-        "digging-deeper/realtime",
-        "digging-deeper/analytics",
-        "digging-deeper/notifications",
-        "digging-deeper/file-uploads",
-        "digging-deeper/logging"
+        "codebase/core/overview",
+        "codebase/core/context",
+        "codebase/core/definitions",
+        "codebase/core/models",
+        "codebase/core/queries",
+        "codebase/core/mutations",
+        "codebase/core/jobs",
+        "codebase/core/events",
+        "codebase/core/notifications"
       ]
     },
     {
-      "group": "Building your Product",
-      "pages": ["build/introduction"]
+      "group": "In Depth",
+      "pages": [
+        "codebase/depth/actions",
+        "codebase/depth/realtime",
+        "codebase/depth/analytics",
+        "codebase/depth/file-uploads",
+        "codebase/depth/search"
+      ]
     },
     {
-      "group": "API Documentation",
-      "pages": ["api-reference/introduction"]
+      "group": "Product Guide",
+      "pages": ["guide/introduction"]
     },
     {
-      "group": "Design System",
-      "pages": ["design-system/introduction"]
+      "group": "Components",
+      "pages": ["components/introduction"]
     },
     {
-      "group": "Packages",
+      "group": "Package Reference",
       "pages": [
         "packages/analytics",
         "packages/auth",
@@ -127,19 +126,11 @@
         "packages/ui",
         "packages/utils"
       ]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
-      ]
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "x": "https://x.com/getproductstack",
+    "github": "https://github.com/getproductstack",
+    "linkedin": "https://www.linkedin.com/company/getproductstack"
   }
 }
