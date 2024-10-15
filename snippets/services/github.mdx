@@ -3,7 +3,7 @@ Add GitHub as an authentication provider. This allows customers to "Sign in w/ G
 1. Create a new [GitHub App](https://github.com/settings/apps) under your organization account (or personal account if you want).
 2. Enter a name, homepage URL, and set the callback URL to `https://localhost:3000/login/oauth/github/callback`.
 3. Check `Request user authorization (OAuth) during installation`.
-4. Under **Permissions** > **Account permissions** > \*\*Email addresses`, check `Read-only`.
+4. Under **Permissions > Account permissions > Email addresses**`, check `Read-only`.
 5. Under **Where can this GitHub App be installed?**, select `Any account`.
 6. Copy the `Client ID`, generate a new `Client Secret` and set the following environment variables:
 

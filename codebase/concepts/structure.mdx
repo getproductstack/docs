@@ -32,7 +32,7 @@ There are four main top-level directories
 
 ### Apps
 
-Applications are the user-facing (user, developer, admin, etc.) entrypoints of the repository.
+The `apps` directory contains the user-facing (user, developer, admin, etc.) applications.
 
 |               |                                            |
 | --------------| -------------------------------------------|
@@ -42,25 +42,25 @@ Applications are the user-facing (user, developer, admin, etc.) entrypoints of t
 
 ### Packages
 
-The packages directory contains shared libraries that provide functionality for the applications.
+The `packages` directory contains shared libraries that provide functionality for the applications.
 
-|                    |                                                        |
+|                           |                                                                   |
 | ------------------------- | ------------------------------------------------------------------|
-| `packages/analytics`      | Product analytics providers
-| `packages/auth`           | Authentication providers
-| `packages/core`           | Core definitions, models, events, jobs and actions
-| `packages/db`             | Database schema and access layer
-| `packages/logger`         | Logging utilities
-| `packages/notifications`  | Multi-channel notifications
-| `packages/queue`          | Background jobs and message queue
-| `packages/realtime`       | WebSockets for real-time communication
-| `packages/storage`        | File uploads and storage
+| `packages/analytics`      | Product analytics providers and helpers
+| `packages/core`           | Core resources and business logic
+| `packages/auth`           | Auth providers and security helpers
+| `packages/db`             | Database client, factories, migrations
+| `packages/logger`         | Logging and debugging utilities
+| `packages/notifications`  | Multi-channel notification system
+| `packages/queue`          | Background jobs, scheduled tasks, and message queues
+| `packages/realtime`       | WebSocket providers and helpers
+| `packages/storage`        | File uploads and storage helpers
 | `packages/ui`             | React component library
 | `packages/utils`          | Utility functions and helpers
 
 ### Config
 
-The config directory contains shared configuration files
+The `config` directory contains shared configuration files.
 
 |                           |                                                                   |
 | ------------------------- | ------------------------------------------------------------------|
@@ -73,7 +73,14 @@ The config directory contains shared configuration files
 
 ### Turbo
 
-The turbo directory contains `generators` for creating new applications, packages, components, and core resources.
+The `turbo` directory contains code generators.
+
+|                           |                                                                   |
+| ------------------------- | ------------------------------------------------------------------|
+| `turbo/generators`        | Generators for creating new apps, packages, components, and resources.
+
+
+## Important Packages
 
 
 

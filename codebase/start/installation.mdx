@@ -20,11 +20,6 @@ You'll need the following installed locally on your machine:
 - [Docker](https://www.docker.com)
 - [OrbStack](https://www.orbstack.dev/) (recommended)
 
-You will also need API keys for the following services:
-
-- [Resend](/getting-started/services#resend-email)
-- [Ably](/getting-started/services#ably-realtime)
-
 ## Installation Steps
 
 Once you have the met the prerequisites, you can start the development setup.
@@ -45,30 +40,42 @@ bun install
 ```
 
   </Step>
-  <Step title="Set environment variables">
+  <Step title="Create the environment file">
 
 ```bash
 cp .env.example .env
 ```
 
-Make sure to have the following environment variables set:
+Make sure the following environment variables are set:
 
 - `APP_URL`
 - `DATABASE_URL`
-- `UPSTASH_REDIS_REST_URL`
-- `UPSTASH_REDIS_REST_TOKEN`
-- `RESEND_API_KEY`
-- `ABLY_API_KEY`
 
 </Step>
 
-<Step title="Start the database">
+<Step title="Start the development services">
 
 ```bash
 docker compose up -d
+```
+
+</Step>
+
+<Step title="Set up the database">
+
+```bash
 bun db:push
 ```
 
+</Step>
+
+<Step title="Seed the database">
+
+If you would like to modify the account that is created when the database is seeded, you can change the `owner` in `apps/cli/commands/seed/data/account.ts`.
+
+```bash
+bun productstack seed
+```
 </Step>
 
 <Step title="Start the development server">
@@ -76,17 +83,30 @@ bun db:push
 ```bash
 bun dev
 ```
+This will start the following services
+
+|                     |                               |
+| ------------------- | ----------------------------- |
+| Product             | https://localhost:3000         |
+| API                 | http://localhost:5432         |
+| UI Library         | http://localhost:6100         |
+| Email Templates     | http://localhost:3001         |
+| Mailhog Server      | http://localhost:8025         |
+| Database Studio     | https://local.drizzle.studio  |
+| Realtime Server     | ws://localhost:8080           |
+
+<Note>
+  Note: The main product is served over https in local development.
+</Note> 
 
 </Step>
 
-<Step title="Open your browser and navigate to">
+<Step title="Login to the application">
 
-|        |                       |
-| ------ | --------------------- |
-| App    | http://localhost:3000 |
-| API    | http://localhost:5432 |
-| UI     | http://localhost:6100 |
-| Emails | http://localhost:3001 |
+- Open the [product](https://localhost:3000) `https://localhost:3000` in your browser
+- Login with `builder@example.com`, unless you modified the data in step 6.
+- Open [Mailhog](http://localhost:8025) `http://localhost:8025` to view the magic link
+- Click the magic link in the email to login
 
 </Step>
 

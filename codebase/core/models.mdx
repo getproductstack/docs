@@ -24,7 +24,8 @@ type ModelFactory<TInput, TOutput> = (data: TInput) => TOutput;
 
 ### Examples
 
-`createUserModel` is a simple example -- it has no relationships, and just a few additional attributes.
+The `UserModel` is a simple example -- it has no relationships, and just a few additional attributes.
+It is created by the `createUserModel` function.
 
 <CodeGroup>
 
@@ -71,7 +72,8 @@ export type UserModel = ReturnType<typeof createUserModel>;
 
 </CodeGroup>
 
-`createCommentModel` is a more complex example -- it has computed attributes, recursive relationships, and relationships that transform to other models.
+`CommentModel` is a more complex example, it has computed attributes, recursive relationships, and relationships that transform to other models.
+It is created by the `createCommentModel` function.
 
 <CodeGroup>
 

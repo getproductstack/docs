@@ -5,6 +5,7 @@
     "dark": "/images/logo/dark.svg",
     "light": "/images/logo/light.svg"
   },
+  "theme": "venus",
   "favicon": "/images/favicon.svg",
   "colors": {
     "primary": "#615BD2",
@@ -66,7 +67,6 @@
       "pages": [
         "codebase/start/introduction",
         "codebase/start/installation",
-        "codebase/start/services",
         "codebase/start/deployment"
       ]
     },
@@ -99,7 +99,9 @@
         "codebase/depth/realtime",
         "codebase/depth/analytics",
         "codebase/depth/file-uploads",
-        "codebase/depth/search"
+        "codebase/depth/search",
+        "codebase/depth/email",
+        "codebase/depth/billing"
       ]
     },
     {

@@ -3,31 +3,79 @@ title: "Deployment"
 icon: "rocket"
 ---
 
+import GitHub from "/snippets/services/github.mdx";
+import Google from "/snippets/services/google.mdx";
+import OpenPanel from "/snippets/services/openpanel.mdx";
+import PostHog from "/snippets/services/posthog.mdx";
+import Discord from "/snippets/services/discord.mdx";
+import Slack from "/snippets/services/slack.mdx";
 import Neon from "/snippets/services/neon.mdx";
 import Upstash from "/snippets/services/upstash.mdx";
+import Stripe from "/snippets/services/stripe.mdx";
+import Vercel from "/snippets/services/vercel.mdx";
+import Resend from "/snippets/services/resend.mdx";
+import Ably from "/snippets/services/ably.mdx";
 
-One of the core ProductStack principles is continuous development and deployment.
-You should be deploying changes frequently, to production, so let's get your first
+Continuous deployment and continuous development are core principles of building great software.
+You should be deploying changes frequently -- to production -- so let's get your first
 deployment out of the way.
 
 ## Prerequisites
 
 Before you begin, make sure you have the following:
 
-<AccordionGroup>
-  <Accordion title="GitHub repository">
-    GitHub is used for hosting the repository. If you haven't already, [create a
-    new repository](https://github.com/new) and push up the code.
-  </Accordion>
-  <Accordion title="Vercel account">
-    Vercel is used for preview and production deployments. If you don't already
-    have an account, head to [vercel.com](https://vercel.com) and create one.
-  </Accordion>
-  <Accordion title="Third-party services">
-    You should have set up all of the [services](/getting-started/services) that you intend to use.
-  </Accordion>
+1. A [GitHub repository](https://github.com/new) with the codebase
+2. A [Vercel account](https://vercel.com)
+3. Third-party providers that you intend to use (see below)
 
-</AccordionGroup> 
+## Providers
+
+ProductStack leverages a few third-party services to provide important product and development
+functionality. It is **highly recommended** that you set these up before proceeding. The following is 
+a list of all providers, their purpose, and how to set them up.
+
+A few important notes on third-party providers:
+
+- **Free tiers**: every service has a free tier that covers enough development, and some production workloads.
+- **Adapter-based**: provider functionality is adapter-based, designed to easily switch between underlying services.
+- **Documentation**: below is the provider set up documentation, functionality documentation can be found in corresponding sections.
+
+<AccordionGroup>
+  <Accordion title="Vercel (deployment, uploads)">
+    <Vercel />
+  </Accordion>
+  <Accordion title="Neon (database)">
+    <Neon />
+  </Accordion>
+  <Accordion title="Upstash (kv, rate-limiting, queue)">
+    <Upstash />
+  </Accordion>
+  <Accordion title="Resend (email)">
+    <Resend />
+  </Accordion>
+  <Accordion title="Ably (realtime)">
+    <Ably />
+  </Accordion>
+    <Accordion title="Stripe (payments)">
+    <Stripe />
+  </Accordion>
+    <Accordion title="OpenPanel (analytics)">
+    <OpenPanel />
+  </Accordion>
+  <Accordion title="Google (authentication)">
+    <Google />
+  </Accordion>
+  <Accordion title="GitHub (authentication)">
+    <GitHub />
+  </Accordion>
+  <Accordion title="Discord (notifications)">
+    <Discord />
+  </Accordion>
+  <Accordion title="Slack (notifications)">
+    <Slack />
+  </Accordion>
+</AccordionGroup>
+
 
 ## Deploying
 
