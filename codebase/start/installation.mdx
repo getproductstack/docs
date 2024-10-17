@@ -28,8 +28,17 @@ Once you have the met the prerequisites, you can start the development setup.
   <Step title="Clone the repository">
 
 ```bash
-git clone https://github.com/getproductstack/productstack.git
-cd productstack
+git clone https://github.com/getproductstack/productstack.git && cd productstack
+```
+
+  </Step>
+  <Step title="Initialize a new repository">
+
+```bash
+rm -rf .git
+git init
+git add .
+git commit -m "Setup Codebase"
 ```
 
   </Step>
@@ -91,7 +100,7 @@ This will start the following services
 | API                 | http://localhost:5432         |
 | UI Library         | http://localhost:6100         |
 | Email Templates     | http://localhost:3001         |
-| Mailhog Server      | http://localhost:8025         |
+| Mailpit Server      | http://localhost:8025         |
 | Database Studio     | https://local.drizzle.studio  |
 | Realtime Server     | ws://localhost:8080           |
 
@@ -105,8 +114,8 @@ This will start the following services
 
 - Open the [product](https://localhost:3000) `https://localhost:3000` in your browser
 - Login with `builder@example.com`, unless you modified the data in step 6.
-- Open [Mailhog](http://localhost:8025) `http://localhost:8025` to view the magic link
-- Click the magic link in the email to login
+- Open [Mailpit](http://localhost:8025) `http://localhost:8025` to view the magic link
+- Click the magic link to login
 
 </Step>
 
